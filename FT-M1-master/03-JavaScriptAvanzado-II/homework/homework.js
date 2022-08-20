@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
 // Closures
 
 function counter() {
-  /*
+	/*
   Ejercicio 1
 
   La función counter debe retornar otra función. Esta función retornada debe actuar como un contador, retornando un valor numérico que empieza en 1 e incrementa con cada invocación.
@@ -13,16 +13,23 @@ function counter() {
   nuevoContador()     // 1
   nuevoContador()     // 2
   nuevoContador()     // 3
+  
+ const otroContador = counter()
+ otroContador()      // 1
+ otroContador()      // 2
+ otroContador()      // 3
+  */
 
-  const otroContador = counter()
-  otroContador()      // 1
-  otroContador()      // 2
-  otroContador()      // 3
-   */
+	let counter = 0;
+	return function() {
+		++counter;
+		return counter;
+	};
 }
 
 function cacheFunction(cb) {
-  /*
+	//memoria cache
+	/*
   Ejercicio 2
 
   Tu tarea aquí es lograr, mediante un closure, que cacheFunction actúe como una memoria caché para el callback que recibe por parámetro (cb); es decir, que "recuerde" el resultado de cada operación que hace, de manera que, al realizar una operación por segunda vez, se pueda obtener el resultado de esa "memoria" sin tener que efectuar otra vez cálculos que ya se hicieron anteriormente.
@@ -41,22 +48,31 @@ function cacheFunction(cb) {
   squareCache(5)    // no volverá a invocar a square, simplemente buscará en la caché cuál es el resultado de square(5) y lo retornará (tip: si usaste un objeto, podés usar hasOwnProperty) 
 
   */
+
+	let cache = {}; //creo un objeto
+	return function(arg) {
+		if (!cache.hasHowProperty(arg)) {
+			//digo" si el objeto cache no tiene una propiedad llamada arg, entonces...
+			cache[arg] = cb(arg); //... que cree una propiedad llamada arg[] y que sea igual al callback cb, ejecutada con el argumento arg.
+		}
+    return cache[arg]; //la función al final retorna la propiedad arg del objeto cache.
+	};
 }
 
 // Bind
 
 var instructor = {
-  nombre: "Franco",
-  edad: 25,
+	nombre: 'Franco',
+	edad: 25
 };
 
 var alumno = {
-  nombre: "Juan",
-  curso: "FullStack",
+	nombre: 'Juan',
+	curso: 'FullStack'
 };
 
 function getNombre() {
-  return this.nombre;
+	return this.nombre;
 }
 
 /*
@@ -67,8 +83,8 @@ function getNombre() {
   Usando el método bind() guardar, en las dos variables declaradas a continuación, dos funciones que actúen como getNombre pero retornen el nombre del instructor y del alumno, respectivamente.
 */
 
-let getNombreInstructor;
-let getNombreAlumno;
+let getNombreInstructor = getNombre.bind(instructor); //estoy creando una copia de la funcion getName pero la estoy usando con el objeto Instructor
+let getNombreAlumno = getNombre.bind(alumno);
 
 /*
   Ejercicio 4
@@ -77,22 +93,22 @@ let getNombreAlumno;
 */
 
 function crearCadena(delimitadorIzquierda, delimitadorDerecha, cadena) {
-  return delimitadorIzquierda + cadena + delimitadorDerecha;
+	return delimitadorIzquierda + cadena + delimitadorDerecha;
 }
 
-let textoAsteriscos;
-let textoGuiones;
-let textoUnderscore;
+let textoAsteriscos = crearCadena.bind(null, '*', '*');
+let textoGuiones = crearCadena.bind(null, '-', '-');
+let textoUnderscore = crearCadena.bind(null, '_', '_');
 
 // No modifiquen nada debajo de esta linea
 // --------------------------------
 
 module.exports = {
-  counter,
-  cacheFunction,
-  getNombreInstructor,
-  getNombreAlumno,
-  textoAsteriscos,
-  textoGuiones,
-  textoUnderscore,
+	counter,
+	cacheFunction,
+	getNombreInstructor,
+	getNombreAlumno,
+	textoAsteriscos,
+	textoGuiones,
+	textoUnderscore
 };
